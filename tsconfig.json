@@ -18,11 +18,18 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": [
     ".eslintrc.cjs",
-    "src"
+    "src",
+    "postcss.config.cjs",
+    "tailwind.config.cjs",
+    "vite.config.ts",
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
