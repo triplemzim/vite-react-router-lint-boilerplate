@@ -25,5 +25,11 @@ module.exports = {
     'react/react-in-jsx-scope': 0,
     'react/button-has-type': 0,
     '@typescript-eslint/no-shadow': 0,
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
   },
 };
