@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import './css/login.css';
+import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,6 +8,7 @@ import { useState } from 'react';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import loginSchema from '../validators/auth';
+import { setCookie } from '../lib/cookieParser';
 import {
   Card,
   CardContent,
@@ -39,10 +41,26 @@ function Login() {
     },
   });
   // console.log(form.watch());
-
-  function onSubmit(data: LoginInput) {
-    alert('Login successfully');
-    console.log(data);
+  const baseUrl = 'https://restsoft.pythonanywhere.com/';
+  async function onSubmit(data: LoginInput) {
+    const options = {
+      url: `${baseUrl}rest-auth/login/`,
+      data,
+    };
+    try {
+      const response = await axios.post(options.url, options.data, {
+        withCredentials: true,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      });
+      setCookie('authToken', response.data.token);
+      console.log('response', response);
+      alert('Login successfully');
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
   }
   return (
     <div className="flex justify-center items-center fixed min-w-full min-h-full bg-cover bg-slate-800">

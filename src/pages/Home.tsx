@@ -8,6 +8,12 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
+import Axios from '../lib/axios';
+
+const axios = new Axios();
+
+console.log(axios);
+
 function Home() {
   return (
     <div className="h-screen overflow-hidden bg-gradient-to-r from-slate-100 to-slate-300">
