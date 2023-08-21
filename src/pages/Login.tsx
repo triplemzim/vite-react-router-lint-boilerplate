@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import './login.css';
+import './css/login.css';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
