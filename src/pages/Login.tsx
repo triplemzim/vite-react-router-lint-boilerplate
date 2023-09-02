@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import './css/login.css';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
