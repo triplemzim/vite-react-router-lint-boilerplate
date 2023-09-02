@@ -6,7 +6,7 @@ import { getCookie } from "./cookieParser";
 // import { getEncryptedCookie, getValueByKey } from "../utils/helpers";
 axios.defaults.withCredentials = true;
 
-// const analyticsToken = "_analytics.token";
+
 export default class Axios {
   get(options: any) {
     options.method = "get";
@@ -60,34 +60,34 @@ export default class Axios {
     });
   }
 
-  // upload(options: any) {
-  //   options.method = "POST";
-  //   options.headers = this.getHeaders();
-  //   options.headers["content-type"] = "multipart/form-data";
-  //   return new Promise((resolve, reject) => {
-  //     axios(options)
-  //       .then((response) => {
-  //         resolve(response);
-  //       })
-  //       .catch((err) => {
-  //         reject(err);
-  //       });
-  //   });
-  // }
+  upload(options: any) {
+    options.method = "POST";
+    options.headers = this.getHeaders();
+    options.headers["content-type"] = "multipart/form-data";
+    return new Promise((resolve, reject) => {
+      axios(options)
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
 
-  // patch(options: any) {
-  //   options.method = "PATCH";
-  //   options.headers = this.getHeaders();
-  //   return new Promise((resolve, reject) => {
-  //     axios(options)
-  //       .then((response) => {
-  //         resolve(response);
-  //       })
-  //       .catch((err) => {
-  //         reject(err);
-  //       });
-  //   });
-  // }
+  patch(options: any) {
+    options.method = "PATCH";
+    options.headers = this.getHeaders();
+    return new Promise((resolve, reject) => {
+      axios(options)
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
 
   put(options: any) {
     options.method = "PUT";

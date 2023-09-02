@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import loginSchema from '../validators/auth';
 import { setCookie } from '../lib/cookieParser';
 import {
@@ -28,6 +28,7 @@ import {
 } from '../components/ui/form';
 import { Button } from '../components/ui/button';
 import { email_prompt, password_prompt } from '../assets/language/en/common';
+import { LOGIN_URL } from '@/lib/constants';
 
 type LoginInput = z.infer<typeof loginSchema>;
 
@@ -36,28 +37,22 @@ function Login() {
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
+      username: '',
       password: '',
     },
   });
-  // console.log(form.watch());
-  const baseUrl = 'https://restsoft.pythonanywhere.com/';
+  const navigate = useNavigate();
+
   async function onSubmit(data: LoginInput) {
     const options = {
-      url: `${baseUrl}rest-auth/login/`,
+      url: LOGIN_URL,
       data,
     };
     try {
-      const response = await axios.post(options.url, options.data, {
-        withCredentials: true,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-        },
-      });
-      setCookie('authToken', response.data.token);
+      const response = await axios.post(options.url, options.data);
+      setCookie('authToken', response.data.key);
+      navigate('/');
       console.log('response', response);
-      alert('Login successfully');
-      console.log(data);
     } catch (error) {
       console.error(error);
     }
@@ -85,11 +80,11 @@ function Login() {
               >
                 <FormField
                   control={form.control}
-                  name="email"
+                  name="username"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-lg font-bold text-white">
-                        Email
+                        Username
                       </FormLabel>
                       <FormControl>
                         <Input placeholder={email_prompt} {...field} />
