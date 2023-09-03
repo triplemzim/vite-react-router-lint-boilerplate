@@ -1,4 +1,5 @@
 import { LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import {
   Card,
   CardHeader,
@@ -9,12 +10,21 @@ import {
 import { Button } from '@/components/ui/button';
 
 import Axios from '../lib/axios';
-
-const axios = new Axios();
-
-console.log(axios);
+import { ADMIN_URL } from '@/lib/constants';
 
 function Home() {
+  const axios = new Axios();
+  console.log(axios);
+  const navigate = useNavigate();
+
+  function openAdminInNewTab() {
+    window.open(ADMIN_URL, '_blank', 'noreferrer');
+  }
+
+  function logout() {
+    navigate('/login');
+  }
+
   return (
     <div className="h-screen overflow-hidden bg-gradient-to-r from-slate-100 to-slate-300">
       <div className="fixed w-full">
@@ -23,11 +33,20 @@ function Home() {
             PCL Dashboard
           </p>
           <div className="col-end-7 col-span-2 justify-self-end">
-            <Button variant="ghost" className="text-white border-solid">
+            <Button
+              variant="ghost"
+              className="text-white border-solid"
+              onClick={() => openAdminInNewTab()}
+            >
               Admin
             </Button>
-            <Button variant="ghost" className="text-white">
-              <LogOut className="mr-2 h-4 w-4" /> Logout
+            <Button
+              variant="ghost"
+              className="text-white"
+              onClick={() => logout()}
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              Logout
             </Button>
           </div>
         </div>
@@ -87,7 +106,9 @@ function Home() {
             <p>Add/update products, customers and more</p>
           </CardContent>
           <CardFooter>
-            <Button className="bg-zinc-800">Proceed</Button>
+            <Button className="bg-zinc-800" onClick={() => openAdminInNewTab()}>
+              Proceed
+            </Button>
           </CardFooter>
         </Card>
       </div>
