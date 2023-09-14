@@ -1,2 +1,9 @@
-export const email_prompt = "Please enter your email";
-export const password_prompt = "Please enter your password";
+export const EMAIL_PROMPT = 'Please enter your email';
+export const PASSWORD_PROMPT = 'Please enter your password';
+export const CUSTOMER_PROMPT = 'Your name';
+export const DEPOT_PROMPT = 'Your depot';
+export const DATE_PROMPT = 'Your ordered date';
+export const PARTICULAR_PROMPT = 'Description';
+export const TRANSACTIONID_PROMPT = 'Transaction ID';
+export const TRANSACTIONTYPE_PROMPT = 'Transaction type';
+export const AMOUNT_PROMPT = 'Amount';

@@ -1,10 +1,10 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { ProductSchema } from './depot';
+import { ProductSchema } from './zodSchema';
 
 const DepotColumns: ColumnDef<ProductSchema>[] = [
   {
     accessorKey: 'serial',
-    header: 'ID',
+    header: 'Serial',
   },
   {
     accessorKey: 'product',

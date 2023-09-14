@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
-import { ProductSchema, depotSchema } from '../validators/zodSchema';
+import { ProductSchema, saleSchema } from '../validators/zodSchema';
 import { Input } from '../components/ui/input'; // Import Shadcn UI components
 import {
   Select,
@@ -31,14 +31,16 @@ import { cn } from '@/lib/utils';
 import { DataTable } from '@/components/ui/data-table';
 import DepotColumns from '@/validators/depotColumn';
 
-type DepotSchema = z.infer<typeof depotSchema>;
+type SaleSchema = z.infer<typeof saleSchema>;
 
-function DepotOperation() {
-  const formData = useForm<DepotSchema>({
-    resolver: zodResolver(depotSchema),
+function Sale() {
+  const formData = useForm<SaleSchema>({
+    resolver: zodResolver(saleSchema),
     defaultValues: {
+      customerName: '',
+      customerCode: '',
       depotCode: '',
-      depotFrom: '',
+      memoNo: '',
       transactionOption: '',
       date: new Date(),
       product: '',
@@ -51,7 +53,7 @@ function DepotOperation() {
 
   const [tableData, setTableData] = useState<ProductSchema[]>([]);
 
-  const getTableFields = (data: DepotSchema) => {
+  const getTableFields = (data: SaleSchema): ProductSchema => {
     return {
       serial: tableData.length + 1,
       id: data.productId,
@@ -83,10 +85,10 @@ function DepotOperation() {
             <div className="border-2 p-8 bg-white">
               <FormField
                 control={formData.control}
-                name="depotCode"
+                name="customerName"
                 render={({ field }) => (
                   <FormItem className="mb-4">
-                    <FormLabel>Depot Code</FormLabel>
+                    <FormLabel>Customer</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -98,7 +100,7 @@ function DepotOperation() {
                 name="depotCode"
                 render={({ field }) => (
                   <FormItem className="mb-4 h-full">
-                    <FormLabel>Depot From</FormLabel>
+                    <FormLabel>Depot</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -107,69 +109,85 @@ function DepotOperation() {
               />
               <FormField
                 control={formData.control}
-                name="transactionOption"
+                name="memoNo"
                 render={({ field }) => (
-                  <FormItem className="mb-4">
-                    <FormLabel>Transaction Option</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Theme" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="new_arrival">New Arrival</SelectItem>
-                        <SelectItem value="other_depot">
-                          Received from Other Depot
-                        </SelectItem>
-                        <SelectItem value="factory_return">
-                          Factory Return
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <FormItem className="mb-4 h-full">
+                    <FormLabel>Memo No</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
                   </FormItem>
                 )}
               />
-              <FormField
-                control={formData.control}
-                name="date"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>Transaction Date</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
+              <div className="flex items-center ">
+                <FormField
+                  control={formData.control}
+                  name="transactionOption"
+                  render={({ field }) => (
+                    <FormItem className="mr-4">
+                      <FormLabel>Transaction Option</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              'w-[240px] pl-3 text-left font-normal',
-                              !field.value && 'text-muted-foreground'
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, 'PPP')
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
+                          <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Theme" />
+                          </SelectTrigger>
                         </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </FormItem>
-                )}
-              />
+                        <SelectContent>
+                          <SelectItem value="new_arrival">
+                            New Arrival
+                          </SelectItem>
+                          <SelectItem value="other_depot">
+                            Received from Other Depot
+                          </SelectItem>
+                          <SelectItem value="factory_return">
+                            Factory Return
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={formData.control}
+                  name="date"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Date</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              className={cn(
+                                'w-[240px] pl-3 text-left font-normal',
+                                !field.value && 'text-muted-foreground'
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, 'PPP')
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
             <div className="border-2 p-8 mt-4 bg-white">
               <FormField
@@ -256,4 +274,4 @@ function DepotOperation() {
   );
 }
 
-export default DepotOperation;
+export default Sale;
