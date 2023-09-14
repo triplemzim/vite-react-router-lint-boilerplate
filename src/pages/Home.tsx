@@ -82,7 +82,9 @@ function Home() {
             <p>Sales, Return and Sales History</p>
           </CardContent>
           <CardFooter>
-            <Button className="bg-zinc-800">Proceed</Button>
+            <Button className="bg-zinc-800" onClick={() => navigate('/sale')}>
+              Proceed
+            </Button>
           </CardFooter>
         </Card>
       </div>
