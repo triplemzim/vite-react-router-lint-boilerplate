@@ -71,7 +71,9 @@ function Home() {
             <p>Manage products in your Depot</p>
           </CardContent>
           <CardFooter>
-            <Button className="bg-zinc-800">Proceed</Button>
+            <Button className="bg-zinc-800" onClick={() => navigate('/depot')}>
+              Proceed
+            </Button>
           </CardFooter>
         </Card>
         <Card className="w-64 shadow-xl bg-gradient-to-r from-slate-400 to-cyan-100 border-solid">
