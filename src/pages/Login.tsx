@@ -26,7 +26,7 @@ import {
   FormMessage,
 } from '../components/ui/form';
 import { Button } from '../components/ui/button';
-import { email_prompt, password_prompt } from '../assets/language/en/common';
+import { EMAIL_PROMPT, PASSWORD_PROMPT } from '../assets/language/en/common';
 import { LOGIN_URL } from '@/lib/constants';
 
 type LoginInput = z.infer<typeof loginSchema>;
@@ -86,7 +86,7 @@ function Login() {
                         Username
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder={email_prompt} {...field} />
+                        <Input placeholder={EMAIL_PROMPT} {...field} />
                       </FormControl>
                       <FormDescription className=" text-gray-300">
                         This is your public display email.
@@ -105,7 +105,7 @@ function Login() {
                       </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder={password_prompt}
+                          placeholder={PASSWORD_PROMPT}
                           {...field}
                           type={showpass ? 'text' : 'password'}
                         />
