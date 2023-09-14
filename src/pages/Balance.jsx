@@ -48,7 +48,7 @@ import {
   PARTICULAR_PROMPT,
 } from '../assets/language/en/common';
 
-type BalanceInput = z.infer<typeof balanceSchema>;
+// type BalanceInput = z.infer<typeof balanceSchema>;
 function Balance() {
   const form = useForm<BalanceInput>({
     resolver: zodResolver(balanceSchema),
@@ -64,7 +64,7 @@ function Balance() {
   });
   // console.log(form.watch());
 
-  function onSubmit(data: BalanceInput) {
+  function onSubmit(data) {
     console.log(data);
   }
   const [invoices, setInvoices] = useState([]);

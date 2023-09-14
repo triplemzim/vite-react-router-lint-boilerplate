@@ -44,4 +44,7 @@ module.exports = {
     ],
     'react/jsx-props-no-spreading': 'off',
   },
+  compilerOptions: {
+    checkJs: false,
+  },
 };
