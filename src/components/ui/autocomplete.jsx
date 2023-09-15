@@ -15,8 +15,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import PropTypes from 'prop-types';
 
-const frameworks = [
+const datas = [
   {
     value: 'next.js',
     label: 'Next.js',
@@ -39,9 +40,10 @@ const frameworks = [
   },
 ];
 
-export function AutoComplete() {
+export function AutoComplete(props) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('');
+  const data = props.data;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -53,29 +55,31 @@ export function AutoComplete() {
           className="w-[200px] justify-between"
         >
           {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : 'Select framework...'}
+            ? data.find((item) => item.value === value)?.label
+            : 'Select...'}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search framework..." className="h-9" />
-          <CommandEmpty>No framework found.</CommandEmpty>
+          <CommandInput placeholder="Search..." className="h-9" />
+          <CommandEmpty>No result found.</CommandEmpty>
           <CommandGroup>
-            {frameworks.map((framework) => (
+            {data.map((item) => (
               <CommandItem
-                key={framework.value}
-                onSelect={(currentValue: string) => {
-                  setValue(currentValue === value ? '' : currentValue);
+                key={item.value}
+                onSelect={(currentValue) => {
+                  const newValue = currentValue === value ? '' : currentValue;
+                  setValue(newValue);
                   setOpen(false);
+                  props.onSelect(data.find((item) => item.value === newValue));
                 }}
               >
-                {framework.label}
+                {item.label}
                 <CheckIcon
                   className={cn(
                     'ml-auto h-4 w-4',
-                    value === framework.value ? 'opacity-100' : 'opacity-0'
+                    value === item.value ? 'opacity-100' : 'opacity-0'
                   )}
                 />
               </CommandItem>
@@ -85,6 +89,11 @@ export function AutoComplete() {
       </PopoverContent>
     </Popover>
   );
+}
+
+AutoComplete.propTypes = {
+  onSelect: PropTypes.func,
+  data: PropTypes.array
 }
 
 export default AutoComplete;

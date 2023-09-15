@@ -3,6 +3,8 @@ import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
 import { Input } from '../components/ui/input'; // Import Shadcn UI components
+import { useNavigate } from 'react-router-dom';
+import { LogOut } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -50,6 +52,8 @@ function DepotOperation() {
     },
   });
 
+  const navigate = useNavigate();
+
   const [tableData, setTableData] = useState([]);
 
   const getTableFields = (data) => {
@@ -63,6 +67,14 @@ function DepotOperation() {
     };
   };
 
+  function logout() {
+    navigate('/login');
+  }
+
+  function openAdminInNewTab() {
+    window.open(ADMIN_URL, '_blank', 'noreferrer');
+  }
+
   const onSubmit = (data) => {
     // Clear the form fields after submission
     // console.log(formData.getValues());
@@ -72,6 +84,36 @@ function DepotOperation() {
 
   return (
     <div className="flex bg-slate-200">
+      <div className="fixed w-full">
+        <div className="grid grid-cols-6 gap-4 bg-gradient-to-r h-12 from-cyan-500 to-slate-800 p-4 content-center">
+          <div className='col-start-1 col-span-2 text-center justify-self-start'>
+          <Button
+                        variant="ghost"
+            className="text-white border-solid"
+            onClick={() => navigate('/')}
+          >
+            PCL Home
+          </Button>
+          </div>
+          <div className="col-end-7 col-span-2 justify-self-end">
+            <Button
+              variant="ghost"
+              className="text-white border-solid"
+              onClick={() => openAdminInNewTab()}
+            >
+              Admin
+            </Button>
+            <Button
+              variant="ghost"
+              className="text-white"
+              onClick={() => logout()}
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              Logout
+            </Button>
+          </div>
+        </div>
+      </div>
       {/* Left Section - Form */}
       <div className="w-full lg:w-1/2 p-4 max-h-screen overflow-y-auto">
         <h2 className="text-2xl font-bold text-center mb-4">Depot Operation</h2>
