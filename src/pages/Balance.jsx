@@ -1,8 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
-import { balanceSchema } from '../validators/zodSchema';
 import {
   Card,
   CardContent,
@@ -50,8 +47,7 @@ import {
 
 // type BalanceInput = z.infer<typeof balanceSchema>;
 function Balance() {
-  const form = useForm<BalanceInput>({
-    resolver: zodResolver(balanceSchema),
+  const form = useForm({
     defaultValues: {
       customer: '',
       depot: '',
@@ -68,11 +64,7 @@ function Balance() {
     console.log(data);
   }
   const [invoices, setInvoices] = useState([]);
-  useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/sale/balance/')
-      .then((res) => res.json())
-      .then((data) => setInvoices(data.results));
-  }, []);
+
   // console.log(invoices);
   // const invoices = [
   //   {
