@@ -1,10 +1,7 @@
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
-import { ProductSchema, saleSchema } from '../validators/zodSchema';
 import { Input } from '../components/ui/input'; // Import Shadcn UI components
 import {
   Select,
@@ -28,14 +25,18 @@ import {
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
-import { DataTable } from '@/components/ui/data-table';
-import DepotColumns from '@/validators/depotColumn';
-
-type SaleSchema = z.infer<typeof saleSchema>;
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 function Sale() {
-  const formData = useForm<SaleSchema>({
-    resolver: zodResolver(saleSchema),
+  const form = useForm({
     defaultValues: {
       customerName: '',
       customerCode: '',
@@ -51,9 +52,9 @@ function Sale() {
     },
   });
 
-  const [tableData, setTableData] = useState<ProductSchema[]>([]);
+  const [tableData, setTableData] = useState([]);
 
-  const getTableFields = (data: SaleSchema): ProductSchema => {
+  const getTableFields = (data) => {
     return {
       serial: tableData.length + 1,
       id: data.productId,
@@ -64,14 +65,10 @@ function Sale() {
     };
   };
 
-  const handleFormSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
+  const onSubmit = (data) => {
     // Clear the form fields after submission
     // console.log(formData.getValues());
-    setTableData((current) => [
-      ...current,
-      getTableFields(formData.getValues()),
-    ]);
+    setTableData((current) => [...current, getTableFields(data)]);
     console.log(tableData);
   };
 
@@ -80,23 +77,25 @@ function Sale() {
       {/* Left Section - Form */}
       <div className="w-full lg:w-1/2 p-4 max-h-screen overflow-y-auto">
         <h2 className="text-2xl font-bold text-center mb-4">Depot Operation</h2>
-        <Form {...formData}>
-          <form className="" onSubmit={handleFormSubmit}>
+        <Form {...form}>
+          <form className="" onSubmit={form.handleSubmit(onsubmit)}>
             <div className="border-2 p-8 bg-white">
               <FormField
-                control={formData.control}
+                control={form.control}
                 name="customerName"
                 render={({ field }) => (
-                  <FormItem className="mb-4">
-                    <FormLabel>Customer</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                  </FormItem>
+                  <div>
+                    <FormItem className="mb-4">
+                      <FormLabel>Customer</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                    </FormItem>
+                  </div>
                 )}
               />
               <FormField
-                control={formData.control}
+                control={form.control}
                 name="depotCode"
                 render={({ field }) => (
                   <FormItem className="mb-4 h-full">
@@ -108,7 +107,7 @@ function Sale() {
                 )}
               />
               <FormField
-                control={formData.control}
+                control={form.control}
                 name="memoNo"
                 render={({ field }) => (
                   <FormItem className="mb-4 h-full">
@@ -121,7 +120,7 @@ function Sale() {
               />
               <div className="flex items-center ">
                 <FormField
-                  control={formData.control}
+                  control={form.control}
                   name="transactionOption"
                   render={({ field }) => (
                     <FormItem className="mr-4">
@@ -151,7 +150,7 @@ function Sale() {
                   )}
                 />
                 <FormField
-                  control={formData.control}
+                  control={form.control}
                   name="date"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
@@ -191,7 +190,7 @@ function Sale() {
             </div>
             <div className="border-2 p-8 mt-4 bg-white">
               <FormField
-                control={formData.control}
+                control={form.control}
                 name="product"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -203,7 +202,7 @@ function Sale() {
                 )}
               />
               <FormField
-                control={formData.control}
+                control={form.control}
                 name="category"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -215,7 +214,7 @@ function Sale() {
                 )}
               />
               <FormField
-                control={formData.control}
+                control={form.control}
                 name="size"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -227,7 +226,7 @@ function Sale() {
                 )}
               />
               <FormField
-                control={formData.control}
+                control={form.control}
                 name="quantity"
                 render={({ field }) => (
                   <FormItem>
@@ -267,7 +266,25 @@ function Sale() {
       <div className="w-1/2 p-4">
         <h2 className="text-2xl font-bold text-center mb-4">Summary</h2>
         <div className="bg-gray-100">
-          <DataTable data={tableData} columns={DepotColumns} />
+          <Table>
+            <TableCaption>A list of your recent invoices.</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">Invoice</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Method</TableHead>
+                <TableHead className="text-right">Amount</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell className="font-medium">INV001</TableCell>
+                <TableCell>Paid</TableCell>
+                <TableCell>Credit Card</TableCell>
+                <TableCell className="text-right">$250.00</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>{' '}
         </div>
       </div>
     </div>

@@ -1,12 +1,9 @@
 import './css/login.css';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
-import loginSchema from '../validators/auth';
 import { setCookie } from '../lib/cookieParser';
 import {
   Card,
@@ -29,12 +26,9 @@ import { Button } from '../components/ui/button';
 import { EMAIL_PROMPT, PASSWORD_PROMPT } from '../assets/language/en/common';
 import { LOGIN_URL } from '@/lib/constants';
 
-type LoginInput = z.infer<typeof loginSchema>;
-
 function Login() {
   const [showpass, setShowpass] = useState(false);
-  const form = useForm<LoginInput>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm({
     defaultValues: {
       username: '',
       password: '',
@@ -42,7 +36,7 @@ function Login() {
   });
   const navigate = useNavigate();
 
-  async function onSubmit(data: LoginInput) {
+  async function onSubmit(data) {
     const options = {
       url: LOGIN_URL,
       data,
