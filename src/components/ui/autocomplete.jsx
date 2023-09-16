@@ -52,7 +52,7 @@ export function AutoComplete(props) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className={cn("w-[200px] h-8 text-xs justify-between font-normal", props.className)}
         >
           {value
             ? data.find((item) => item.value === value)?.label
@@ -62,7 +62,7 @@ export function AutoComplete(props) {
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search..." className="h-9" />
+          <CommandInput placeholder="Search..." className={cn("h-9 text-xs")} />
           <CommandEmpty>No result found.</CommandEmpty>
           <CommandGroup>
             {data.map((item) => (

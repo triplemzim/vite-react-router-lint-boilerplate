@@ -36,7 +36,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { AutoComplete } from "@/components/ui/AutoComplete";
+import { AutoComplete } from '@/components/ui/AutoComplete';
 
 const datas = [
   {
@@ -61,8 +61,6 @@ const datas = [
   },
 ];
 
-
-
 function Sale() {
   const form = useForm({
     defaultValues: {
@@ -70,13 +68,14 @@ function Sale() {
       customerCode: '',
       depotCode: '',
       memoNo: '',
-      transactionOption: '',
+      transactionOption: 'new_sale',
       date: new Date(),
       product: '',
       productId: '',
       category: '',
       size: '',
       quantity: 0,
+      stock: 0,
     },
   });
 
@@ -111,7 +110,7 @@ function Sale() {
   }
 
   return (
-    <div className='h-screen overflow-hidden'>
+    <div className="h-full">
       <div className="fixed w-full">
         <div className="grid grid-cols-6 gap-4 bg-gradient-to-r h-12 from-cyan-500 to-slate-800 p-4 content-center">
           <div className="col-start-1 col-span-2 text-center justify-self-start">
@@ -142,77 +141,71 @@ function Sale() {
           </div>
         </div>
       </div>
-      <div className="flex bg-slate-200">
+      <div className="h-screen overflow-auto flex bg-slate-200">
         {/* Left Section - Form */}
-        <div className="w-full lg:w-1/2 p-4 h-screen overflow-hidden mt-12">
-          <h2 className="text-2xl font-bold text-center mb-4">Sale</h2>
+        <div className="w-full lg:w-1/2 p-4 mt-12 space-y-2">
+          <h2 className="text-xl font-bold text-center mb-4">Sale</h2>
           <Form {...form}>
             <form className="" onSubmit={form.handleSubmit(onsubmit)}>
-              <div className="border-2 p-8 bg-white">
-                <FormField
-                  control={form.control}
-                  name="customerName"
-                  render={({ field }) => (
-                    <div>
-                      <FormItem className="mb-4">
-                        <FormLabel>Customer</FormLabel>
+              <div className="border-2 p-4 bg-white space-y-2">
+                <div className="flex items-center justify-between">
+                  <FormField
+                    control={form.control}
+                    name="customerName"
+                    render={({ field }) => (
+                      <div>
+                        <FormItem className="flex flex-col">
+                          <FormLabel className="text-xs">Customer</FormLabel>
+                          <FormControl>
+                            <AutoComplete
+                              data={datas}
+                              onSelect={(selected) =>
+                                console.log('Object selected', selected)
+                              }
+                            />
+                          </FormControl>
+                        </FormItem>
+                      </div>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="depotCode"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Depot</FormLabel>
                         <FormControl>
-                          {/* <Input {...field} /> */}
-                          <AutoComplete data={datas} onSelect={(selected) => console.log('Object selected', selected)} />
+                          <AutoComplete
+                            data={datas}
+                            onSelect={(selected) =>
+                              console.log('Object selected', selected)
+                            }
+                          />
                         </FormControl>
                       </FormItem>
-                    </div>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="depotCode"
-                  render={({ field }) => (
-                    <FormItem className="mb-4 h-full">
-                      <FormLabel>Depot</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="memoNo"
-                  render={({ field }) => (
-                    <FormItem className="mb-4 h-full">
-                      <FormLabel>Memo No</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <div className="flex items-center ">
+                    )}
+                  />
+                </div>
+                <div className="flex items-center justify-between">
                   <FormField
                     control={form.control}
                     name="transactionOption"
                     render={({ field }) => (
-                      <FormItem className="mr-4">
+                      <FormItem className="flex-col">
                         <FormLabel>Transaction Option</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger className="w-[180px]">
+                            <SelectTrigger className="w-[200px]">
                               <SelectValue placeholder="Theme" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="new_arrival">
-                              New Arrival
-                            </SelectItem>
-                            <SelectItem value="other_depot">
-                              Received from Other Depot
-                            </SelectItem>
-                            <SelectItem value="factory_return">
-                              Factory Return
+                            <SelectItem value="new_sale">New Sale</SelectItem>
+                            <SelectItem value="sales_return">
+                              Sales return
                             </SelectItem>
                           </SelectContent>
                         </Select>
@@ -225,13 +218,13 @@ function Sale() {
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
                         <FormLabel>Date</FormLabel>
-                        <Popover>
+                        <Popover className="align-bottom">
                           <PopoverTrigger asChild>
                             <FormControl>
                               <Button
                                 variant="outline"
                                 className={cn(
-                                  'w-[240px] pl-3 text-left font-normal',
+                                  'w-[200px] pl-3 h-8 text-xs text-left font-normal',
                                   !field.value && 'text-muted-foreground'
                                 )}
                               >
@@ -257,68 +250,122 @@ function Sale() {
                     )}
                   />
                 </div>
-              </div>
-              <div className="border-2 p-8 mt-4 bg-white">
                 <FormField
                   control={form.control}
-                  name="product"
-                  render={({ field }) => (
-                    <FormItem className="mb-4">
-                      <FormLabel>Product</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="category"
-                  render={({ field }) => (
-                    <FormItem className="mb-4">
-                      <FormLabel>Category</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="size"
-                  render={({ field }) => (
-                    <FormItem className="mb-4">
-                      <FormLabel>Size</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="quantity"
+                  name="memoNo"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Quantity</FormLabel>
+                      <FormLabel>Memo no</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input
+                          className="w-[200px]"
+                          placeholder="Memo"
+                          {...field}
+                        />
                       </FormControl>
                     </FormItem>
                   )}
                 />
               </div>
-              <div className="flex">
-                <FormItem>
-                  <Button className="bg-gray-600 text-white px-4 py-2 m-4 rounded-md hover:bg-gray-700">
-                    Add Product
-                  </Button>
-                </FormItem>
-                <FormItem>
-                  <Button className="bg-red-500 text-white px-4 py-2 m-4 rounded-md hover:bg-red-600">
-                    Delete Item
-                  </Button>
-                </FormItem>
+              <div className="border-2 p-4 mt-4 bg-white space-y-2">
+                <div className="flex items-center justify-between">
+                  <FormField
+                    control={form.control}
+                    name="product"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Product</FormLabel>
+                        <FormControl>
+                          <AutoComplete
+                            data={datas}
+                            onSelect={(selected) =>
+                              console.log('Object selected', selected)
+                            }
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="category"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Category</FormLabel>
+                        <FormControl>
+                          <AutoComplete
+                            data={datas}
+                            onSelect={(selected) =>
+                              console.log('Object selected', selected)
+                            }
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="flex items-center justify-between space-x-4">
+                  <FormField
+                    control={form.control}
+                    name="size"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Size</FormLabel>
+                        <FormControl>
+                          <AutoComplete
+                            className=""
+                            data={datas}
+                            onSelect={(selected) =>
+                              console.log('Object selected', selected)
+                            }
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="stock"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Stock</FormLabel>
+                        <FormControl>
+                          <p className="w-[200px] rounded-md p-1 pl-2 bg-slate-300 border-black">
+                            {field.value}
+                          </p>
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="flex items-end justify-between">
+                  <FormField
+                    control={form.control}
+                    name="quantity"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Quantity</FormLabel>
+                        <FormControl>
+                          <Input type="number" {...field} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <div className="flex space-between space-x-4">
+                    <FormItem>
+                      <Button className="bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                        Add or Update
+                      </Button>
+                    </FormItem>
+                    <FormItem>
+                      <Button className="bg-red-500 text-white rounded-md hover:bg-red-600">
+                        Delete Item
+                      </Button>
+                    </FormItem>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-end">
                 <FormItem>
                   <Button
                     type="submit"
@@ -334,7 +381,7 @@ function Sale() {
 
         {/* Right Section - Table */}
         <div className="w-1/2 p-4 mt-12">
-          <h2 className="text-2xl font-bold text-center mb-4">Summary</h2>
+          <h2 className="text-xl font-bold text-center mb-4">Summary</h2>
           <div className="bg-gray-100">
             <Table>
               <TableCaption>A list of your recent invoices.</TableCaption>
